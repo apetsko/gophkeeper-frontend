@@ -1,34 +1,33 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { useAuthStore } from '@/stores/auth.store.js'
+
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+      <nav v-show="user" class="navbar navbar-expand navbar-dark bg-dark">
+        <div class="navbar-nav">
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/keep">Keep</RouterLink>
+          <a @click="authStore.logout()" class="nav-item nav-link">Logout</a>
+        </div>
       </nav>
+      <div class="container pt-4 pb-4">
+        <RouterView />
+      </div>
     </div>
   </header>
-
-  <RouterView />
 </template>
 
 <style scoped>
 header {
   line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+  width: 100%;
 }
 
 nav {
@@ -60,21 +59,16 @@ nav a:first-of-type {
   header {
     display: flex;
     place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
   }
 
   header .wrapper {
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;
+    width: 100%;
   }
 
   nav {
-    text-align: left;
     margin-left: -1rem;
     font-size: 1rem;
 
