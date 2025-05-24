@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.store.js'
 import HomeView from '../views/HomeView.vue'
+import KeepView from '../views/KeepView.vue'
 import LoginPage from '../views/LoginPage.vue'
 
 const router = createRouter({
@@ -20,7 +21,7 @@ const router = createRouter({
     {
       path: '/keep',
       name: 'keep',
-      component: () => import('../views/KeepView.vue'),
+      component: KeepView,
       meta: { requiresAuth: true },
     },
   ],

@@ -13,11 +13,11 @@ const { user } = storeToRefs(authStore)
       <nav v-show="user" class="navbar navbar-expand navbar-dark bg-dark">
         <div class="navbar-nav flex justify-between">
           <div>
-            <RouterLink to="/">Home</RouterLink>
-            <RouterLink to="/keep">Keep</RouterLink>
+            <RouterLink to="/">Главная</RouterLink>
+            <RouterLink to="/keep">Загрузка</RouterLink>
           </div>
           <div>
-            <a @click="authStore.logout()" class="nav-item nav-link">Logout</a>
+            <a @click="authStore.logout()" class="nav-item nav-link">Выйти</a>
           </div>
         </div>
       </nav>

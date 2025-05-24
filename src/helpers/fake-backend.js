@@ -14,6 +14,8 @@ function fakeBackend() {
             return authenticate();
           case url.endsWith('/users') && opts.method === 'GET':
             return getUsers();
+          case url.endsWith('/credentials') && opts.method === 'POST':
+            return saveCredentials();
           default:
             return realFetch(url, opts)
               .then(response => resolve(response))
@@ -34,6 +36,10 @@ function fakeBackend() {
           lastName: user.lastName,
           token: 'fake-jwt-token'
         });
+      }
+
+      function saveCredentials() {
+        return ok();
       }
 
       function getUsers() {
