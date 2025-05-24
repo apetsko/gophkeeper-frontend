@@ -19,30 +19,49 @@ function onSubmit(values, { setErrors }) {
 </script>
 
 <template>
-  <div>
-    <div class="alert alert-info">
-      Username: test<br />
-      Password: test
+  <div class="flex justify-center flex-col w-100 m-auto">
+    <div style="margin-bottom: 25px">
+      <h2 class="text-3xl text-center">Login</h2>
     </div>
-    <h2>Login</h2>
-    <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
-      <div class="form-group">
-        <label>Username</label>
-        <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }" />
-        <div class="invalid-feedback">{{errors.username}}</div>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <Field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" />
-        <div class="invalid-feedback">{{errors.password}}</div>
-      </div>
-      <div class="form-group">
-        <button class="btn btn-primary" :disabled="isSubmitting">
-          <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
-          Login
-        </button>
-      </div>
-      <div v-if="errors.apiError" class="alert alert-danger mt-3 mb-0">{{errors.apiError}}</div>
-    </Form>
+    <div>
+      <Form class="max-w-sm mx-auto" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-900 dark:text-white" style="margin-bottom: 10px;">Username</label>
+          <Field name="username"
+                 type="text"
+                 id="email"
+                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                 required
+                 :class="{ 'is-invalid': errors.username }" />
+          <div class="invalid-feedback">{{errors.username}}</div>
+        </div>
+        <div style="margin-top: 15px;">
+          <label for="password" class="block text-sm font-medium text-gray-900 dark:text-white" style="margin-bottom: 10px;">Password</label>
+          <Field name="password"
+                 type="password"
+                 id="password"
+                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                 required
+                 :class="{ 'is-invalid': errors.password }" />
+          <div class="invalid-feedback">{{errors.password}}</div>
+        </div>
+        <div class="form-group text-center" style="margin-top: 25px;">
+          <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  type="submit"
+                  :disabled="isSubmitting">
+            <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>Login</button>
+        </div>
+        <div v-if="errors.apiError" class="alert alert-danger">{{errors.apiError}}</div>
+      </Form>
+    </div>
   </div>
 </template>
+
+<style>
+.container {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+</style>
+

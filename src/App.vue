@@ -11,10 +11,14 @@ const { user } = storeToRefs(authStore)
   <header>
     <div class="wrapper">
       <nav v-show="user" class="navbar navbar-expand navbar-dark bg-dark">
-        <div class="navbar-nav">
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/keep">Keep</RouterLink>
-          <a @click="authStore.logout()" class="nav-item nav-link">Logout</a>
+        <div class="navbar-nav flex justify-between">
+          <div>
+            <RouterLink to="/">Home</RouterLink>
+            <RouterLink to="/keep">Keep</RouterLink>
+          </div>
+          <div>
+            <a @click="authStore.logout()" class="nav-item nav-link">Logout</a>
+          </div>
         </div>
       </nav>
       <div class="container pt-4 pb-4">
