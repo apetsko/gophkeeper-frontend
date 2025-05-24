@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.store.js'
 import HomeView from '../views/HomeView.vue'
-import KeepView from '../views/KeepView.vue'
+import Credentials from '../views/Credentials.vue'
 import LoginPage from '../views/LoginPage.vue'
 
 const router = createRouter({
@@ -19,9 +19,9 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/keep',
-      name: 'keep',
-      component: KeepView,
+      path: '/credentials',
+      name: 'credentials',
+      component: Credentials,
       meta: { requiresAuth: true },
     },
   ],

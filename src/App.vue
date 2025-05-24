@@ -14,7 +14,7 @@ const { user } = storeToRefs(authStore)
         <div class="navbar-nav flex justify-between">
           <div>
             <RouterLink to="/">Главная</RouterLink>
-            <RouterLink to="/keep">Загрузка</RouterLink>
+            <RouterLink to="/credentials">Логин/пароль</RouterLink>
           </div>
           <div>
             <a @click="authStore.logout()" class="nav-item nav-link">Выйти</a>
