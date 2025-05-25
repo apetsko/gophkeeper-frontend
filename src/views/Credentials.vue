@@ -4,10 +4,10 @@ import * as Yup from 'yup';
 import { ref } from 'vue';
 import { fetchWrapper } from '@/helpers/fetch-wrapper.js';
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/users`;
+const baseUrl = `${import.meta.env.VITE_API_URL}/v1`;
 
 const schema = Yup.object().shape({
-  username: Yup.string()
+  login: Yup.string()
     .required('Обязательно к заполнению')
     .min(1, 'Максимум 1 символ')
     .max(150, 'Максимум 20 символов'),
@@ -24,14 +24,14 @@ const isFormSubmitted = ref(false);
 const showPassword = ref(false);
 
 async function onSubmit(values, { resetForm }) {
-  const { username, password, meta } = values;
+  const { login, password, meta } = values;
 
   const requestData = {
-    credentials: {
-      username: username.trim(),
-      password: password
-    },
-    meta: meta
+    login: login.trim(),
+    password: password,
+    meta: {
+      content: meta
+    }
   };
 
   isFormSubmitted.value = true;
@@ -45,7 +45,12 @@ async function onSubmit(values, { resetForm }) {
       successSubmitForm.value = null;
     } else {
       resetForm();
+      errorSubmitForm.value = null;
       successSubmitForm.value = 'Данные успешно отправлены!'
+
+      setTimeout(() => {
+        successSubmitForm.value = null;
+      }, 5000);
     }
   } catch (error) {
     successSubmitForm.value = null;
@@ -82,20 +87,19 @@ async function onSubmit(values, { resetForm }) {
         v-slot="{ errors }"
         autocomplete="on"
       >
-        <!-- Username Field -->
+        <!-- Login Field -->
         <div class="mb-4">
-          <label for="username"
-                 class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Username</label>
+          <label for="login"
+                 class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Login</label>
           <Field
-            name="username"
+            name="login"
             type="text"
-            id="username"
-            autocomplete="username"
+            id="login"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            :class="{ 'border-red-500': errors.username }"
+            :class="{ 'border-red-500': errors.login }"
           />
-          <div v-if="errors.username" class="text-red-500 text-xs mt-1">
-            {{ errors.username }}
+          <div v-if="errors.login" class="text-red-500 text-xs mt-1">
+            {{ errors.login }}
           </div>
         </div>
 
