@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.store.js'
 import HomeView from '../views/HomeView.vue'
 import Credentials from '../views/Credentials.vue'
+import BankCard from '../views/BankCard.vue'
 import LoginPage from '../views/LoginPage.vue'
 
 const router = createRouter({
@@ -22,6 +23,12 @@ const router = createRouter({
       path: '/credentials',
       name: 'credentials',
       component: Credentials,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/bank-card',
+      name: 'bank-card',
+      component: BankCard,
       meta: { requiresAuth: true },
     },
   ],

@@ -65,12 +65,6 @@ async function onSubmit(values, { resetForm }) {
 
 <template>
   <div class="flex justify-center flex-col w-100 m-auto">
-    <div style="margin-bottom: 25px">
-      <p class="text-center text-sm text-gray-500 mt-2">
-        Введите свои записи в безопасном режиме
-      </p>
-    </div>
-
     <div v-if="errorSubmitForm" class="p-4 mb-4 text-sm text-white rounded-lg bg-red-800" role="alert" style="margin-bottom: 15px;">
       <span class="font-medium">{{ errorSubmitForm }}</span>
     </div>
@@ -85,16 +79,17 @@ async function onSubmit(values, { resetForm }) {
         @submit="onSubmit"
         :validation-schema="schema"
         v-slot="{ errors }"
-        autocomplete="on"
+        autocomplete="off"
       >
         <!-- Login Field -->
         <div class="mb-4">
           <label for="login"
-                 class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Login</label>
+                 class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Логин</label>
           <Field
             name="login"
             type="text"
             id="login"
+            autocomplete="off"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             :class="{ 'border-red-500': errors.login }"
           />
@@ -112,7 +107,7 @@ async function onSubmit(values, { resetForm }) {
               name="password"
               :type="showPassword ? 'text' : 'password'"
               id="password"
-              autocomplete="current-password"
+              autocomplete="off"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               :class="{ 'border-red-500': errors.password }"
             />
@@ -132,15 +127,16 @@ async function onSubmit(values, { resetForm }) {
         <!-- Meta Field -->
         <div class="mb-6" style="margin-top: 25px;">
           <label for="meta"
-                 class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Метаинформация</label>
+                 class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Дополнительная информация</label>
           <div class="relative">
             <Field
               name="meta"
               as="textarea"
               rows="5"
               id="meta"
-              autocomplete="current-meta"
+              autocomplete="off"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Примечания, описание и т.д."
             />
           </div>
           <div v-if="errors.meta" class="text-red-500 text-xs mt-1">
@@ -170,18 +166,4 @@ async function onSubmit(values, { resetForm }) {
 
 <style scoped>
 
-.container {
-  display: flex;
-  align-items: center;
-  min-height: 100vh;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
 </style>

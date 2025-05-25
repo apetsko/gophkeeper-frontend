@@ -58,10 +58,6 @@ function onSubmit(values, { setErrors }) {
 </template>
 
 <style scoped>
-.container {
-  display: flex;
-  align-items: center;
-  height: 100vh;
-}
+
 </style>
 
