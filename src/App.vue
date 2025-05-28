@@ -16,6 +16,7 @@ const { user } = storeToRefs(authStore)
             <RouterLink to="/">Главная</RouterLink>
             <RouterLink to="/credentials">Логин/пароль</RouterLink>
             <RouterLink to="/bank-card">Банковская карта</RouterLink>
+            <RouterLink to="/binary-data">Файл</RouterLink>
           </div>
           <div>
             <a @click="authStore.logout()" class="nav-item nav-link">Выйти</a>

@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth.store.js'
 import HomeView from '../views/HomeView.vue'
 import Credentials from '../views/Credentials.vue'
 import BankCard from '../views/BankCard.vue'
+import BinaryData from '../views/BinaryData.vue'
 import LoginPage from '../views/LoginPage.vue'
 
 const router = createRouter({
@@ -29,6 +30,12 @@ const router = createRouter({
       path: '/bank-card',
       name: 'bank-card',
       component: BankCard,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/binary-data',
+      name: 'binary-data',
+      component: BinaryData,
       meta: { requiresAuth: true },
     },
   ],
