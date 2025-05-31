@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { ref } from 'vue';
 import { fetchWrapper } from '@/helpers/fetch-wrapper.js';
 
+const bankCardType = 1;
 const baseUrl = `${import.meta.env.VITE_API_URL}/v1`;
 
 const schema = Yup.object().shape({
@@ -57,20 +58,23 @@ async function onSubmit(values, { resetForm }) {
   const { cardNumber, cardholder, expiryDate, cvv, meta } = values;
 
   const requestData = {
-    cardNumber: cardNumber.replace(/\s/g, ''),
-    cardholder: cardholder.trim(),
-    expiryDate: expiryDate,
-    cvv: cvv,
+    bank_card: {
+      card_number: cardNumber.replace(/\s/g, ''),
+      cardholder_name: cardholder.trim(),
+      expiry_date: expiryDate,
+      cvv: cvv,
+    },
     meta: {
       content: meta
-    }
+    },
+    type: bankCardType
   };
 
   isSubmitting.value = true;
   isFormSubmitted.value = true;
 
   try {
-    const response = await fetchWrapper.post(`${baseUrl}/bank-card`, requestData);
+    const response = await fetchWrapper.post(`${baseUrl}/data/save`, requestData);
 
     if (response && response.error) {
       errorSubmitForm.value = response.error || 'Ошибка сервера';

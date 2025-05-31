@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import {ref} from 'vue';
 import {fetchWrapper} from '@/helpers/fetch-wrapper.js';
 
+const binaryDataType = 3;
 const baseUrl = `${import.meta.env.VITE_API_URL}/v1`;
 
 const schema = Yup.object().shape({
@@ -43,16 +44,19 @@ async function onSubmit(values, {resetForm}) {
     const fileBase64 = await readFileAsBase64(file);
 
     const payload = {
-      file: {
+      binary_data: {
         name: file.name,
         type: file.type,
         size: file.size,
         data: fileBase64,
       },
-      meta: {content: meta}
+      meta: {
+        content: meta
+      },
+      type: binaryDataType
     };
 
-    const response = await fetchWrapper.post(`${baseUrl}/binary-data`, payload);
+    const response = await fetchWrapper.post(`${baseUrl}/data/save`, payload);
 
     if (response?.error) {
       errorSubmitForm.value = response.error;

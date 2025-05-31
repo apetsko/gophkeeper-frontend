@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { ref } from 'vue';
 import { fetchWrapper } from '@/helpers/fetch-wrapper.js';
 
+const credentialsType = 2;
 const baseUrl = `${import.meta.env.VITE_API_URL}/v1`;
 
 const schema = Yup.object().shape({
@@ -27,18 +28,21 @@ async function onSubmit(values, { resetForm }) {
   const { login, password, meta } = values;
 
   const requestData = {
-    login: login.trim(),
-    password: password,
+    credentials: {
+      login: login.trim(),
+      password: password,
+    },
     meta: {
       content: meta
-    }
+    },
+    type: credentialsType
   };
 
   isFormSubmitted.value = true;
   isFormSubmitted.value = true;
 
   try {
-    const response = await fetchWrapper.post(`${baseUrl}/credentials`, requestData);
+    const response = await fetchWrapper.post(`${baseUrl}/data/save`, requestData);
 
     if (response && response.error) {
       errorSubmitForm.value = response.error || 'Ошибка сервера';
