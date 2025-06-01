@@ -52,6 +52,12 @@ function onSubmit(values, { setErrors }) {
             <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>Войти</button>
         </div>
         <div v-if="errors.apiError" class="alert alert-danger">{{errors.apiError}}</div>
+        <div class="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+          или <router-link
+            to="/signup"
+            class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+          >создайте аккаунт</router-link>
+        </div>
       </Form>
     </div>
   </div>

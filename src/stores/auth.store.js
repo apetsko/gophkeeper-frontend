@@ -20,6 +20,19 @@ export const useAuthStore = defineStore('auth', {
 
       router.push(this.returnUrl || '/');
     },
+    async register(username, password) {
+      try {
+        const user = await fetchWrapper.post(`${baseUrl}/signup`, { username, password });
+
+        this.user = user;
+
+        localStorage.setItem('user', JSON.stringify(user));
+
+        router.push(this.returnUrl || '/');
+      } catch (error) {
+        throw new Error(error.response?.data?.message || 'Registration failed');
+      }
+    },
     logout() {
       this.user = null;
       localStorage.removeItem('user');
