@@ -3,7 +3,7 @@ import router from '@/router/index.js'
 
 import { fetchWrapper } from '@/helpers/fetch-wrapper.js';
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/users`;
+const baseUrl = `${import.meta.env.VITE_API_URL}/v1`;
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -12,7 +12,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     async login(username, password) {
-      const user = await fetchWrapper.post(`${baseUrl}/authenticate`, { username, password });
+      const user = await fetchWrapper.post(`${baseUrl}/login`, { username, password });
 
       this.user = user;
 

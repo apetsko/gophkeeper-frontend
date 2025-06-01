@@ -21,7 +21,7 @@ function onSubmit(values, { setErrors }) {
 <template>
   <div class="flex justify-center flex-col w-100 m-auto">
     <div style="margin-bottom: 25px">
-      <h2 class="text-3xl text-center">Login</h2>
+      <h2 class="text-3xl text-center">Авторизация</h2>
     </div>
     <div>
       <Form class="max-w-sm mx-auto" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
@@ -49,7 +49,7 @@ function onSubmit(values, { setErrors }) {
           <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   type="submit"
                   :disabled="isSubmitting">
-            <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>Login</button>
+            <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>Войти</button>
         </div>
         <div v-if="errors.apiError" class="alert alert-danger">{{errors.apiError}}</div>
       </Form>
