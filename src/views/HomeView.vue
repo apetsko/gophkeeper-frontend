@@ -12,6 +12,12 @@ const itemsPerPage = ref(10);
 const isLoading = ref(false);
 const error = ref(null);
 
+// Модалка и текущие детали
+const isModalOpen = ref(false);
+const modalData = ref(null);
+const modalError = ref(null);
+const modalLoading = ref(false);
+
 // Получение данных с сервера
 const fetchRecords = async () => {
   try {
@@ -38,65 +44,76 @@ const handlePageChange = (page) => {
   fetchRecords();
 };
 
+const fetchDataDetails = async (id) => {
+  try {
+    modalLoading.value = true;
+    modalError.value = null;
+
+    const response = await fetchWrapper.get(`${baseUrl}/data/view?id=${id}`);
+
+    modalData.value = response;
+    isModalOpen.value = true;
+  } catch (err) {
+    modalError.value = err.message || 'Ошибка при загрузке данных';
+  } finally {
+    modalLoading.value = false;
+  }
+};
+
 // Обработчик действий
 const handleAction = async (itemId, itemType) => {
-  console.log(`Действие для элемента с ID: ${itemId}, тип: ${itemType}`);
-  // Здесь можно добавить разную логику для разных типов
+  if (itemType === 'binary_data') {
+    // Для бинарных данных - скачивание
+    window.open(`${baseUrl}/data/download?id=${itemId}`, '_blank');
+  } else {
+    // Для остальных типов - открыть модалку с деталями
+    await fetchDataDetails(itemId);
+  }
 };
 
 // Загрузка данных при монтировании
 onMounted(() => {
   fetchRecords();
 });
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  modalData.value = null;
+  modalError.value = null;
+};
 </script>
 
 <template>
   <main>
-    <!-- Состояние загрузки -->
-    <div v-if="isLoading" class="text-center py-4">
-      Загрузка данных...
-    </div>
+    <div v-if="isLoading" class="text-center py-4">Загрузка данных...</div>
 
-    <!-- Сообщение об ошибке -->
     <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
       {{ error }}
     </div>
 
-    <!-- Таблица с данными -->
     <div v-if="!isLoading && !error" class="relative overflow-x-auto">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-          <th scope="col" class="px-6 py-3">#</th>
-          <th scope="col" class="px-6 py-3">Тип</th>
-          <th scope="col" class="px-6 py-3">Meta</th>
-          <th scope="col" class="px-6 py-3">Действия</th>
+          <th class="px-6 py-3">#</th>
+          <th class="px-6 py-3">Тип</th>
+          <th class="px-6 py-3">Meta</th>
+          <th class="px-6 py-3">Действия</th>
         </tr>
         </thead>
         <tbody>
-        <tr
-          v-for="item in records"
-          :key="item.id"
-          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
-        >
-          <th scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ item.id }}
-          </th>
+        <tr v-for="item in records" :key="item.id" class="dark:bg-gray-800 dark:border-gray-700">
+          <th class="px-6 py-4 font-medium whitespace-nowrap">{{ item.id }}</th>
           <td class="px-6 py-4">{{ item.type }}</td>
           <td class="px-6 py-4">{{ item.meta?.content }}</td>
           <td class="px-6 py-4">
             <button
               @click="handleAction(item.id, item.type)"
-              class="flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              class="text-blue-600 hover:underline"
             >
-              <template v-if="item.type !== 'binary_data'">
-                Просмотр
-              </template>
-              <template v-else>
-                Скачать
-              </template>
+              <template v-if="item.type !== 'binary_data'">Просмотр</template>
+              <template v-else>Скачать</template>
             </button>
           </td>
         </tr>
@@ -120,9 +137,40 @@ onMounted(() => {
         </nav>
       </div>
 
-      <!-- Информация о пагинации -->
-      <div class="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center">
+      <div class="text-sm text-gray-500 mt-2 text-center">
         Показано {{ records.length }} из {{ totalCount }} записей
+      </div>
+    </div>
+
+    <!-- Модалка -->
+    <div v-if="isModalOpen"
+         class="fixed inset-0 flex items-center justify-center z-50">
+      <div class="rounded-lg p-6 max-w-lg w-full relative bg-white text-gray-600">
+        <button
+          @click="closeModal"
+          class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 font-bold"
+          aria-label="Закрыть"
+        >✖</button>
+
+        <div v-if="modalLoading">Загрузка...</div>
+        <div v-if="modalError" class="text-red-600">{{ modalError }}</div>
+
+        <div v-if="modalData && !modalLoading">
+          <h2 class="text-xl font-bold mb-4">Детали данных</h2>
+          <div v-if="modalData.type === 'DATA_TYPE_BANK_CARD'">
+            <p><strong>Номер карты:</strong> {{ modalData.bankCard.cardNumber }}</p>
+            <p><strong>Срок действия:</strong> {{ modalData.bankCard.expiryDate }}</p>
+            <p><strong>CVV:</strong> {{ modalData.bankCard.cvv }}</p>
+            <p><strong>Владелец карты:</strong> {{ modalData.bankCard.cardholder }}</p>
+          </div>
+          <div v-else-if="modalData.type === 'DATA_TYPE_CREDENTIALS'">
+            <p><strong>Логин:</strong> {{ modalData.credentials.login }}</p>
+            <p><strong>Пароль:</strong> {{ modalData.credentials.password }}</p>
+          </div>
+          <div v-else>
+            <p>Тип данных не поддерживается для просмотра</p>
+          </div>
+        </div>
       </div>
     </div>
   </main>
