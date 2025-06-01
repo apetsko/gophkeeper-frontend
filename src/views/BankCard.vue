@@ -60,7 +60,7 @@ async function onSubmit(values, { resetForm }) {
   const requestData = {
     bank_card: {
       card_number: cardNumber.replace(/\s/g, ''),
-      cardholder_name: cardholder.trim(),
+      cardholder: cardholder.trim(),
       expiry_date: expiryDate,
       cvv: cvv,
     },

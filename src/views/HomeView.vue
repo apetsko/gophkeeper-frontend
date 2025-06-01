@@ -99,6 +99,7 @@ const closeModal = () => {
           <th class="px-6 py-3">#</th>
           <th class="px-6 py-3">Тип</th>
           <th class="px-6 py-3">Meta</th>
+          <th class="px-6 py-3">Создано</th>
           <th class="px-6 py-3">Действия</th>
         </tr>
         </thead>
@@ -107,6 +108,7 @@ const closeModal = () => {
           <th class="px-6 py-4 font-medium whitespace-nowrap">{{ item.id }}</th>
           <td class="px-6 py-4">{{ item.type }}</td>
           <td class="px-6 py-4">{{ item.meta?.content }}</td>
+          <td class="px-6 py-4">{{ item.createdAt }}</td>
           <td class="px-6 py-4">
             <button
               @click="handleAction(item.id, item.type)"
@@ -121,25 +123,25 @@ const closeModal = () => {
       </table>
 
       <!-- Пагинация -->
-      <div class="flex justify-center mt-4">
-        <nav class="inline-flex rounded-md shadow">
-          <button
-            v-for="page in Math.ceil(totalCount / itemsPerPage)"
-            :key="page"
-            @click="handlePageChange(page)"
-            :class="{
-              'px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50': true,
-              'bg-blue-50 border-blue-500 text-blue-600': currentPage === page
-            }"
-          >
-            {{ page }}
-          </button>
-        </nav>
-      </div>
+<!--      <div class="flex justify-center mt-4">-->
+<!--        <nav class="inline-flex rounded-md shadow">-->
+<!--          <button-->
+<!--            v-for="page in Math.ceil(totalCount / itemsPerPage)"-->
+<!--            :key="page"-->
+<!--            @click="handlePageChange(page)"-->
+<!--            :class="{-->
+<!--              'px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50': true,-->
+<!--              'bg-blue-50 border-blue-500 text-blue-600': currentPage === page-->
+<!--            }"-->
+<!--          >-->
+<!--            {{ page }}-->
+<!--          </button>-->
+<!--        </nav>-->
+<!--      </div>-->
 
-      <div class="text-sm text-gray-500 mt-2 text-center">
-        Показано {{ records.length }} из {{ totalCount }} записей
-      </div>
+<!--      <div class="text-sm text-gray-500 mt-2 text-center">-->
+<!--        Показано {{ records.length }} из {{ totalCount }} записей-->
+<!--      </div>-->
     </div>
 
     <!-- Модалка -->
