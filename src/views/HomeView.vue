@@ -60,6 +60,31 @@ const fetchDataDetails = async (id) => {
   }
 };
 
+// Функция удаления записи
+const deleteRecord = async (id) => {
+  if (!confirm('Вы уверены, что хотите удалить эту запись?')) {
+    return;
+  }
+
+  try {
+    await fetchWrapper.delete(`${baseUrl}/data/delete?id=${id}`);
+
+    // Удаляем запись из массива без перезагрузки
+    records.value = records.value.filter(record => record.id !== id);
+    totalCount.value -= 1;
+
+    // Если на текущей странице не осталось записей и это не первая страница,
+    // переходим на предыдущую страницу
+    if (records.value.length === 0 && currentPage.value > 1) {
+      currentPage.value -= 1;
+      fetchRecords();
+    }
+  } catch (err) {
+    error.value = err.message || 'Ошибка при удалении записи';
+    console.error('Ошибка:', err);
+  }
+};
+
 // Обработчик действий
 const handleAction = async (itemId, itemType) => {
   if (itemType === 'binary_data') {
@@ -109,7 +134,7 @@ const closeModal = () => {
           <td class="px-6 py-4">{{ item.type }}</td>
           <td class="px-6 py-4">{{ item.meta?.content }}</td>
           <td class="px-6 py-4">{{ item.createdAt }}</td>
-          <td class="px-6 py-4">
+          <td class="px-6 py-4 space-x-2">
             <button
               @click="handleAction(item.id, item.type)"
               class="text-blue-600 hover:underline"
@@ -117,31 +142,17 @@ const closeModal = () => {
               <template v-if="item.type !== 'binary_data'">Просмотр</template>
               <template v-else>Скачать</template>
             </button>
+            <br>
+            <button
+              @click="deleteRecord(item.id)"
+              class="text-red-600 hover:underline"
+            >
+              Удалить
+            </button>
           </td>
         </tr>
         </tbody>
       </table>
-
-      <!-- Пагинация -->
-<!--      <div class="flex justify-center mt-4">-->
-<!--        <nav class="inline-flex rounded-md shadow">-->
-<!--          <button-->
-<!--            v-for="page in Math.ceil(totalCount / itemsPerPage)"-->
-<!--            :key="page"-->
-<!--            @click="handlePageChange(page)"-->
-<!--            :class="{-->
-<!--              'px-4 py-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50': true,-->
-<!--              'bg-blue-50 border-blue-500 text-blue-600': currentPage === page-->
-<!--            }"-->
-<!--          >-->
-<!--            {{ page }}-->
-<!--          </button>-->
-<!--        </nav>-->
-<!--      </div>-->
-
-<!--      <div class="text-sm text-gray-500 mt-2 text-center">-->
-<!--        Показано {{ records.length }} из {{ totalCount }} записей-->
-<!--      </div>-->
     </div>
 
     <!-- Модалка -->
