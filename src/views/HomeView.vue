@@ -51,14 +51,41 @@ const fetchDataDetails = async (id) => {
 
     const response = await fetchWrapper.get(`${baseUrl}/data/view?id=${id}`);
 
-    modalData.value = response;
-    isModalOpen.value = true;
+    if (response.type === 'DATA_TYPE_BINARY_DATA') {
+      downloadBinaryFile(response.binaryData);
+    } else {
+      modalData.value = response;
+      isModalOpen.value = true;
+    }
   } catch (err) {
     modalError.value = err.message || 'Ошибка при загрузке данных';
   } finally {
     modalLoading.value = false;
   }
 };
+
+function downloadBinaryFile(binaryData) {
+  const byteCharacters = atob(binaryData.data);
+  const byteNumbers = new Array(byteCharacters.length);
+
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+
+  const byteArray = new Uint8Array(byteNumbers);
+
+  const blob = new Blob([byteArray], { type: binaryData.type });
+
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = binaryData.name || 'file';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(link.href);
+}
 
 // Функция удаления записи
 const deleteRecord = async (id) => {
@@ -87,13 +114,7 @@ const deleteRecord = async (id) => {
 
 // Обработчик действий
 const handleAction = async (itemId, itemType) => {
-  if (itemType === 'binary_data') {
-    // Для бинарных данных - скачивание
-    window.open(`${baseUrl}/data/download?id=${itemId}`, '_blank');
-  } else {
-    // Для остальных типов - открыть модалку с деталями
-    await fetchDataDetails(itemId);
-  }
+  await fetchDataDetails(itemId);
 };
 
 // Загрузка данных при монтировании
