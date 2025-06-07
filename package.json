@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
-    "dev:docker": "vite --mode docker"
+    "dev:docker": "vite build --mode docker"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",
