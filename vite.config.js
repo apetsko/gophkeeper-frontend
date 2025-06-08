@@ -17,4 +17,10 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+    server: {
+      https: {
+        key: 'certs/server.key',
+        cert: 'certs/server.crt',
+      },
+   }
 })
